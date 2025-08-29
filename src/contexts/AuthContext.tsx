@@ -14,6 +14,7 @@ interface User {
   role: "doador" | "receptor" | "voluntario" | "admin";
   avatar?: string;
   createdAt: string;
+  password: string;
 }
 
 interface AuthContextType {
@@ -70,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const existingUsers = Cookies.get("registered_users");
+
       if (!existingUsers) {
         return false;
       }
@@ -118,6 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: userData.name,
         email: userData.email,
         role: userData.role,
+        password: userData.password,
         createdAt: new Date().toISOString(),
       };
       

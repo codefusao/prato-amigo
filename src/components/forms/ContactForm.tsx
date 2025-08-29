@@ -28,7 +28,6 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
   });
 
   const onSubmit = (data: ContactFormData) => {
-    console.log(data);
     toast.success(
       "Mensagem enviada com sucesso! Entraremos em contato em breve."
     );

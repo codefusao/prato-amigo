@@ -42,7 +42,7 @@ export function Register() {
         title="Junte-se ao Prato Amigo"
         subtitle="Faça parte da nossa rede de solidariedade e ajude a reduzir o desperdício de alimentos."
       />
-
+      {/* 
       <section className="py-16 bg-gradient-to-br from-green-50 to-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -73,7 +73,7 @@ export function Register() {
           </div>
         </div>
       </section>
-
+ */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-8">

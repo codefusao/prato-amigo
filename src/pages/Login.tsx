@@ -29,7 +29,7 @@ export function Login() {
       } else {
         setError("Email ou senha inválidos. Tente novamente.");
       }
-    } catch (err : unknown) {
+    } catch (err: unknown) {
       setError("Erro ao fazer login. Tente novamente.");
     } finally {
       setIsSubmitting(false);

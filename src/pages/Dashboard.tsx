@@ -123,7 +123,7 @@ export function Dashboard() {
               </Button>
             </Link>
             <Link to="/tutorial">
-              <Button className="bg-green-600 hover:bg-green-700">
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
                 Ver tutorial
               </Button>
             </Link>

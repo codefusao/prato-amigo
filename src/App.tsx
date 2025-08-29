@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router";
+import { HashRouter, Routes, Route } from "react-router";
 import { Toaster } from "sonner";
 import { Layout } from "./components/layout/Layout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
@@ -13,9 +13,7 @@ const About = lazy(() =>
   import("./pages/About").then((module) => ({ default: module.About }))
 );
 const HowItWorks = lazy(() =>
-  import("./pages/HowItWorks").then((module) => ({
-    default: module.HowItWorks,
-  }))
+  import("./pages/HowItWorks").then((module) => ({ default: module.HowItWorks }))
 );
 const Contact = lazy(() =>
   import("./pages/Contact").then((module) => ({ default: module.Contact }))
@@ -38,79 +36,35 @@ function PageLoader() {
   );
 }
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        index: true,
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: "sobre",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <About />
-          </Suspense>
-        ),
-      },
-      {
-        path: "como-funciona",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <HowItWorks />
-          </Suspense>
-        ),
-      },
-      {
-        path: "contato",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Contact />
-          </Suspense>
-        ),
-      },
-      {
-        path: "cadastro",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Register />
-          </Suspense>
-        ),
-      },
-      {
-        path: "login",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Login />
-          </Suspense>
-        ),
-      },
-    ],
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <Suspense fallback={<PageLoader />}>
-        <ProtectedRoute>
-          <DashboardLayout>
-            <Dashboard />
-          </DashboardLayout>
-        </ProtectedRoute>
-      </Suspense>
-    ),
-  },
-]);
-
 export default function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <HashRouter>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="sobre" element={<About />} />
+              <Route path="como-funciona" element={<HowItWorks />} />
+              <Route path="contato" element={<Contact />} />
+              <Route path="cadastro" element={<Register />} />
+              <Route path="login" element={<Login />} />
+            </Route>
+
+            <Route
+              path="/dashboard/*"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Dashboard />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </HashRouter>
+
       <Toaster position="top-right" richColors closeButton duration={5000} />
     </AuthProvider>
   );
