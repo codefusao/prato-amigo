@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { HashRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { Toaster } from "sonner";
 import { Layout } from "./components/layout/Layout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
@@ -24,7 +24,7 @@ function PageLoader() {
 export default function App() {
   return (
     <AuthProvider>
-      <HashRouter>
+      <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -48,7 +48,7 @@ export default function App() {
             />
           </Routes>
         </Suspense>
-      </HashRouter>
+      </BrowserRouter>
 
       <Toaster position="top-right" richColors closeButton duration={5000} />
     </AuthProvider>
