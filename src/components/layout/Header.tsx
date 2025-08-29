@@ -6,7 +6,6 @@ import {
   Leaf,
   User,
   LogOut,
-  Settings,
   ChevronDown,
 } from "lucide-react";
 import { Button } from "../../components/ui/Button";
