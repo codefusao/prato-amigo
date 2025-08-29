@@ -27,7 +27,7 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
     resolver: zodResolver(contactSchema),
   });
 
-  const onSubmit = (data: ContactFormData) => {
+  const onSubmit = () => {
     toast.success(
       "Mensagem enviada com sucesso! Entraremos em contato em breve."
     );

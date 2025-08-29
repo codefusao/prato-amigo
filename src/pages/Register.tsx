@@ -3,7 +3,8 @@ import { RegisterForm } from "../components/forms/RegisterForm";
 import { Users, Heart, Leaf, Shield, Clock } from "lucide-react";
 
 export function Register() {
-  const benefits = [
+
+/*   const benefits = [
     {
       icon: Users,
       title: "Conecte-se com a Comunidade",
@@ -35,7 +36,7 @@ export function Register() {
         "Cadastro simples e rápido, você pode começar a ajudar em poucos minutos.",
     },
   ];
-
+ */
   return (
     <>
       <PageHeader
