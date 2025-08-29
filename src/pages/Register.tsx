@@ -1,5 +1,6 @@
 import { PageHeader } from "../components/shared/PageHeader";
 import { RegisterForm } from "../components/forms/RegisterForm";
+import { Link } from "react-router";
 
 export function Register() {
 
@@ -90,12 +91,12 @@ export function Register() {
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Já tem uma conta?{" "}
-              <a
-                href="#"
+              <Link
+                to="/login"
                 className="text-green-600 hover:text-green-700 font-medium underline"
               >
                 Faça login aqui
-              </a>
+              </Link>
             </p>
           </div>
         </div>
