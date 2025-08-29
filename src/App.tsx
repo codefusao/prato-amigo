@@ -1,32 +1,17 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { HashRouter, Routes, Route } from "react-router";
 import { Toaster } from "sonner";
 import { Layout } from "./components/layout/Layout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
-
-const Home = lazy(() =>
-  import("./pages/Home").then((module) => ({ default: module.Home }))
-);
-const About = lazy(() =>
-  import("./pages/About").then((module) => ({ default: module.About }))
-);
-const HowItWorks = lazy(() =>
-  import("./pages/HowItWorks").then((module) => ({ default: module.HowItWorks }))
-);
-const Contact = lazy(() =>
-  import("./pages/Contact").then((module) => ({ default: module.Contact }))
-);
-const Register = lazy(() =>
-  import("./pages/Register").then((module) => ({ default: module.Register }))
-);
-const Login = lazy(() =>
-  import("./pages/Login").then((module) => ({ default: module.Login }))
-);
-const Dashboard = lazy(() =>
-  import("./pages/Dashboard").then((module) => ({ default: module.Dashboard }))
-);
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { HowItWorks } from "./pages/HowItWorks";
+import { Contact } from "./pages/Contact";
+import { Register } from "./pages/Register";
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
 
 function PageLoader() {
   return (

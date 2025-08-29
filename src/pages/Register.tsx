@@ -1,6 +1,5 @@
 import { PageHeader } from "../components/shared/PageHeader";
 import { RegisterForm } from "../components/forms/RegisterForm";
-import { Users, Heart, Leaf, Shield, Clock } from "lucide-react";
 
 export function Register() {
 
