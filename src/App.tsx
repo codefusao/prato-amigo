@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { Layout } from "./components/layout/Layout";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { AuthProvider } from "./contexts/AuthContext";
+import { DonationProvider } from "./contexts/DonationContext";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { Home } from "./pages/Home";
 import { About } from "./pages/About";
@@ -24,6 +25,7 @@ function PageLoader() {
 export default function App() {
   return (
     <AuthProvider>
+      <DonationProvider>
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -51,6 +53,7 @@ export default function App() {
       </BrowserRouter>
 
       <Toaster position="top-right" richColors closeButton duration={5000} />
+      </DonationProvider>
     </AuthProvider>
   );
 }

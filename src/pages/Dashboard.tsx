@@ -1,42 +1,320 @@
+import { useState } from "react";
 import { Link } from "react-router";
-import { Plus, Package, Users, BarChart3, Calendar } from "lucide-react";
+import { Plus, Package, BarChart3, Calendar, Clock, Search, Truck, Heart } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
+import { DonationModal } from "../components/modals/DonationModal";
+import { DonationList } from "../components/pages/dashboard/DonationList";
 
 export function Dashboard() {
   const { user } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const quickActions = [
+  const DonorDashboard = () => {
+    const donorActions = [
     {
       title: "Nova Doação",
       description: "Registrar alimentos disponíveis",
       icon: Plus,
-      href: "/dashboard",
+        action: () => setIsModalOpen(true),
       color: "green",
+        disabled: false,
     },
     {
       title: "Ver Solicitações",
       description: "Visualizar pedidos pendentes",
       icon: Package,
-      href: "/dashboard",
+        action: () => {},
       color: "blue",
+        disabled: true,
+        comingSoon: true,
     },
     {
       title: "Agendar Entrega",
       description: "Programar retirada ou entrega",
       icon: Calendar,
-      href: "/dashboard",
+        action: () => {},
       color: "purple",
+        disabled: true,
+        comingSoon: true,
     },
     {
       title: "Relatórios",
       description: "Ver estatísticas e impacto",
       icon: BarChart3,
-      href: "/dashboard",
+        action: () => {},
+        color: "orange",
+        disabled: true,
+        comingSoon: true,
+      },
+    ];
+
+    return (
+      <>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Ações Rápidas
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {donorActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={action.action}
+                disabled={action.disabled}
+                className={`p-4 border border-gray-200 rounded-lg transition-all group ${
+                  action.disabled
+                    ? "opacity-50 cursor-not-allowed bg-gray-50"
+                    : "hover:border-green-300 hover:shadow-md cursor-pointer"
+                }`}
+              >
+                <div className="relative">
+                  <div
+                    className={`w-12 h-12 bg-${action.color}-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-${action.color}-200 transition-colors`}
+                  >
+                    <action.icon
+                      className={`w-6 h-6 text-${action.color}-600`}
+                    />
+                    {action.comingSoon && (
+                      <div className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                        <Clock className="w-3 h-3" />
+                      </div>
+                    )}
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    {action.title}
+                  </h4>
+                  <p className="text-sm text-gray-600">{action.description}</p>
+                  {action.comingSoon && (
+                    <p className="text-xs text-orange-600 mt-2 font-medium">
+                      Em breve
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <DonationList />
+      </>
+    );
+  };
+
+  const ReceiverDashboard = () => {
+    const receiverActions = [
+      {
+        title: "Buscar Doações",
+        description: "Encontrar alimentos disponíveis",
+        icon: Search,
+        action: () => {},
+        color: "blue",
+        disabled: true,
+        comingSoon: true,
+      },
+      {
+        title: "Minhas Solicitações",
+        description: "Ver pedidos realizados",
+        icon: Package,
+        action: () => {},
+        color: "green",
+        disabled: true,
+        comingSoon: true,
+      },
+      {
+        title: "Histórico",
+        description: "Doações recebidas",
+        icon: BarChart3,
+        action: () => {},
+        color: "purple",
+        disabled: true,
+        comingSoon: true,
+      },
+    ];
+
+    return (
+      <>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Ações Rápidas
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {receiverActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={action.action}
+                disabled={action.disabled}
+                className={`p-4 border border-gray-200 rounded-lg transition-all group ${
+                  action.disabled
+                    ? "opacity-50 cursor-not-allowed bg-gray-50"
+                    : "hover:border-blue-300 hover:shadow-md cursor-pointer"
+                }`}
+              >
+                <div className="relative">
+                  <div
+                    className={`w-12 h-12 bg-${action.color}-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-${action.color}-200 transition-colors`}
+                  >
+                    <action.icon
+                      className={`w-6 h-6 text-${action.color}-600`}
+                    />
+                    {action.comingSoon && (
+                      <div className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                        <Clock className="w-3 h-3" />
+                      </div>
+                    )}
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    {action.title}
+                  </h4>
+                  <p className="text-sm text-gray-600">{action.description}</p>
+                  {action.comingSoon && (
+                    <p className="text-xs text-orange-600 mt-2 font-medium">
+                      Em breve
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Heart className="w-10 h-10 text-blue-600" />
+          </div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+            Bem-vindo ao Prato Amigo!
+          </h3>
+          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            Como receptor, você pode buscar doações de alimentos disponíveis na plataforma.
+            Em breve você poderá solicitar alimentos e acompanhar suas entregas.
+          </p>
+          <Link to="/como-funciona">
+            <Button
+              variant="outline"
+              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+            >
+              Como funciona
+            </Button>
+          </Link>
+        </div>
+      </>
+    );
+  };
+
+  const VolunteerDashboard = () => {
+    const volunteerActions = [
+      {
+        title: "Ver Entregas",
+        description: "Visualizar entregas pendentes",
+        icon: Truck,
+        action: () => {},
+        color: "green",
+        disabled: true,
+        comingSoon: true,
+      },
+      {
+        title: "Minhas Entregas",
+        description: "Histórico de entregas realizadas",
+        icon: Package,
+        action: () => {},
+        color: "blue",
+        disabled: true,
+        comingSoon: true,
+      },
+      {
+        title: "Relatórios",
+        description: "Ver estatísticas de impacto",
+        icon: BarChart3,
+        action: () => {},
       color: "orange",
-    },
-  ];
+        disabled: true,
+        comingSoon: true,
+      },
+    ];
+
+    return (
+      <>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Ações Rápidas
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {volunteerActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={action.action}
+                disabled={action.disabled}
+                className={`p-4 border border-gray-200 rounded-lg transition-all group ${
+                  action.disabled
+                    ? "opacity-50 cursor-not-allowed bg-gray-50"
+                    : "hover:border-green-300 hover:shadow-md cursor-pointer"
+                }`}
+              >
+                <div className="relative">
+                  <div
+                    className={`w-12 h-12 bg-${action.color}-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-${action.color}-200 transition-colors`}
+                  >
+                    <action.icon
+                      className={`w-6 h-6 text-${action.color}-600`}
+                    />
+                    {action.comingSoon && (
+                      <div className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                        <Clock className="w-3 h-3" />
+                      </div>
+                    )}
+                  </div>
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    {action.title}
+                  </h4>
+                  <p className="text-sm text-gray-600">{action.description}</p>
+                  {action.comingSoon && (
+                    <p className="text-xs text-orange-600 mt-2 font-medium">
+                      Em breve
+                    </p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Truck className="w-10 h-10 text-green-600" />
+          </div>
+          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+            Bem-vindo ao Prato Amigo!
+          </h3>
+          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            Como voluntário, você pode ajudar no transporte de doações entre doadores e receptores.
+            Em breve você poderá ver entregas disponíveis e se voluntariar para realizá-las.
+          </p>
+          <Link to="/como-funciona">
+            <Button
+              variant="outline"
+              className="text-green-600 border-green-200 hover:bg-green-50"
+            >
+              Como funciona
+            </Button>
+          </Link>
+        </div>
+      </>
+    );
+  };
+
+  const renderDashboard = () => {
+    switch (user?.role) {
+      case "doador":
+        return <DonorDashboard />;
+      case "receptor":
+        return <ReceiverDashboard />;
+      case "voluntario":
+        return <VolunteerDashboard />;
+      default:
+        return <DonorDashboard />;
+    }
+  };
 
   return (
     <>
@@ -66,70 +344,16 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Ações Rápidas
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {quickActions.map((action, index) => (
-              <Link key={index} to={action.href}>
-                <div className="p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:shadow-md transition-all cursor-pointer group">
-                  <div
-                    className={`w-12 h-12 bg-${action.color}-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-${action.color}-200 transition-colors`}
-                  >
-                    <action.icon
-                      className={`w-6 h-6 text-${action.color}-600`}
-                    />
-                  </div>
-                  <h4 className="font-medium text-gray-900 mb-1">
-                    {action.title}
-                  </h4>
-                  <p className="text-sm text-gray-600">{action.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Users className="w-10 h-10 text-green-600" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-            Bem-vindo ao Prato Amigo!
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Como{" "}
-            {user?.role === "doador"
-              ? "doador"
-              : user?.role === "receptor"
-              ? "receptor"
-              : "voluntário"}
-            , você pode começar a usar a plataforma para{" "}
-            {user?.role === "doador"
-              ? "registrar doações de alimentos"
-              : user?.role === "receptor"
-              ? "solicitar alimentos disponíveis"
-              : "ajudar no transporte de doações"}
-            .
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link to="/como-funciona">
-              <Button
-                variant="outline"
-                className="text-green-600 border-green-200 hover:bg-green-50"
-              >
-                Como funciona
-              </Button>
-            </Link>
-            <Link to="/tutorial">
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                Ver tutorial
-              </Button>
-            </Link>
-          </div>
-        </div>
+        {renderDashboard()}
       </div>
+
+      {user?.role === "doador" && (
+        <DonationModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          mode="create"
+        />
+      )}
     </>
   );
 }

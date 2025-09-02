@@ -1,0 +1,108 @@
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
+import Cookies from "js-cookie";
+
+interface Donation {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  quantity: string;
+  category: string;
+  expirationDate: string;
+  location: string;
+  status: "disponivel" | "reservado" | "entregue";
+  createdAt: string;
+  image?: string;
+}
+
+interface DonationContextType {
+  donations: Donation[];
+  addDonation: (
+    donation: Omit<Donation, "id" | "createdAt" | "status">
+  ) => void;
+  updateDonation: (id: string, updates: Partial<Donation>) => void;
+  deleteDonation: (id: string) => void;
+  getUserDonations: (userId: string) => Donation[];
+}
+
+const DonationContext = createContext<DonationContextType | undefined>(
+  undefined
+);
+
+export function DonationProvider({ children }: { children: ReactNode }) {
+  const [donations, setDonations] = useState<Donation[]>([]);
+
+  useEffect(() => {
+    const savedDonations = Cookies.get("user_donations");
+    if (savedDonations) {
+      setDonations(JSON.parse(savedDonations));
+    }
+  }, []);
+
+  const saveDonations = (newDonations: Donation[]) => {
+    setDonations(newDonations);
+    Cookies.set("user_donations", JSON.stringify(newDonations), {
+      expires: 365,
+    });
+  };
+
+  const addDonation = (
+    donationData: Omit<Donation, "id" | "createdAt" | "status">
+  ) => {
+    const newDonation: Donation = {
+      ...donationData,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      status: "disponivel",
+    };
+
+    const updatedDonations = [...donations, newDonation];
+    saveDonations(updatedDonations);
+  };
+
+  const updateDonation = (id: string, updates: Partial<Donation>) => {
+    const updatedDonations = donations.map((donation) =>
+      donation.id === id ? { ...donation, ...updates } : donation
+    );
+    saveDonations(updatedDonations);
+  };
+
+  const deleteDonation = (id: string) => {
+    const updatedDonations = donations.filter((donation) => donation.id !== id);
+    saveDonations(updatedDonations);
+  };
+
+  const getUserDonations = (userId: string) => {
+    return donations.filter((donation) => donation.userId === userId);
+  };
+
+  const value: DonationContextType = {
+    donations,
+    addDonation,
+    updateDonation,
+    deleteDonation,
+    getUserDonations,
+  };
+
+  return (
+    <DonationContext.Provider value={value}>
+      {children}
+    </DonationContext.Provider>
+  );
+}
+
+export function useDonations(): DonationContextType {
+  const context = useContext(DonationContext);
+  if (context === undefined) {
+    throw new Error(
+      "useDonations deve ser usado dentro de um DonationProvider"
+    );
+  }
+  return context;
+}

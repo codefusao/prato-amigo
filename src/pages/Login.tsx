@@ -43,38 +43,45 @@ export function Login() {
         subtitle="Acesse sua conta para gerenciar doações, solicitações e acompanhar seu impacto social."
       />
 
-      <section className="py-16 bg-gradient-to-br from-green-50 to-white">
+      <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="max-w-md mx-auto px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-green-600" />
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-green-100 relative overflow-hidden">
+            <div className="absolute -top-10 -right-10 w-20 h-20 bg-green-100 rounded-full opacity-50"></div>
+            <div className="absolute -bottom-8 -left-8 w-16 h-16 bg-blue-100 rounded-full opacity-50"></div>
+            <div className="absolute top-1/2 right-4 w-8 h-8 bg-yellow-100 rounded-full opacity-30"></div>
+            <div className="text-center mb-8 relative z-10">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Mail className="w-10 h-10 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 Bem-vindo de volta!
               </h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 text-lg">
                 Entre com suas credenciais para acessar sua conta
               </p>
+              <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-500">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span>Conectando pessoas através da solidariedade</span>
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3 shadow-sm">
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                  <p className="text-red-700 text-sm">{error}</p>
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
                 </div>
               )}
 
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-semibold text-gray-700 mb-3"
                 >
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
@@ -82,7 +89,7 @@ export function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="seu@email.com"
                     required
-                    className="pl-10"
+                    className="pl-12 py-3 border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 rounded-xl transition-all duration-200"
                   />
                 </div>
               </div>
@@ -90,12 +97,12 @@ export function Login() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-semibold text-gray-700 mb-3"
                 >
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -103,12 +110,12 @@ export function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Sua senha"
                     required
-                    className="pl-10 pr-10"
+                    className="pl-12 pr-12 py-3 border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 rounded-xl transition-all duration-200"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -140,22 +147,25 @@ export function Login() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl hover:from-green-700 hover:to-green-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
               >
-                {isSubmitting ? "Entrando..." : "Entrar"}
+                {isSubmitting ? "Entrando..." : "Entrar na Plataforma"}
               </Button>
             </form>
 
-            <div className="mt-8 text-center">
-              <p className="text-gray-600">
-                Não tem uma conta?{" "}
+            <div className="mt-8 text-center relative z-10">
+              <div className="border-t border-gray-200 pt-6">
+                <p className="text-gray-600 mb-4">
+                  Não tem uma conta ainda?
+                </p>
                 <Link
                   to="/cadastro"
-                  className="text-green-600 hover:text-green-700 font-medium underline"
+                  className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold text-lg transition-colors"
                 >
-                  Cadastre-se aqui
+                  <span>Cadastre-se aqui</span>
+                  <div className="w-1 h-1 bg-green-600 rounded-full"></div>
                 </Link>
-              </p>
+              </div>
             </div>
           </div>
         </div>
