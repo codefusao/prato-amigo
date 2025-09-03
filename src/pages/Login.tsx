@@ -1,28 +1,36 @@
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
+import { ForgotPasswordModal } from "../components/modals/ForgotPasswordModal";
+import { loginSchema, type LoginFormData } from "../schemas/login";
 
 export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
     setError("");
-    setIsSubmitting(true);
 
     try {
-      const success = await login(email, password);
+      const success = await login(data.email, data.password);
 
       if (success) {
         navigate("/dashboard");
@@ -31,8 +39,6 @@ export function Login() {
       }
     } catch (err: unknown) {
       setError("Erro ao fazer login. Tente novamente.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -65,7 +71,7 @@ export function Login() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-10">
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3 shadow-sm">
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
@@ -74,56 +80,29 @@ export function Login() {
               )}
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-semibold text-gray-700 mb-3"
-                >
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu@email.com"
-                    required
-                    className="pl-12 py-3 border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 rounded-xl transition-all duration-200"
-                  />
-                </div>
+                <Input
+                  label="Email"
+                  id="email"
+                  type="email"
+                  {...register("email")}
+                  placeholder="seu@email.com"
+                  error={errors.email?.message}
+                  leftIcon={Mail}
+                />
               </div>
 
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-semibold text-gray-700 mb-3"
-                >
-                  Senha
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Sua senha"
-                    required
-                    className="pl-12 pr-12 py-3 border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 rounded-xl transition-all duration-200"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
-                    ) : (
-                      <Eye className="w-5 h-5" />
-                    )}
-                  </button>
-                </div>
+                <Input
+                  label="Senha"
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="Sua senha"
+                  error={errors.password?.message}
+                  leftIcon={Lock}
+                  rightIcon={showPassword ? EyeOff : Eye}
+                  onRightIconClick={() => setShowPassword(!showPassword)}
+                />
               </div>
 
               <div className="flex items-center justify-between">
@@ -136,12 +115,13 @@ export function Login() {
                     Lembrar de mim
                   </span>
                 </label>
-                <Link
-                  to="/esqueci-senha"
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPasswordModal(true)}
                   className="text-sm text-green-600 hover:text-green-700 font-medium"
                 >
                   Esqueceu a senha?
-                </Link>
+                </button>
               </div>
 
               <Button
@@ -170,6 +150,11 @@ export function Login() {
           </div>
         </div>
       </section>
+
+      <ForgotPasswordModal
+        isOpen={showForgotPasswordModal}
+        onClose={() => setShowForgotPasswordModal(false)}
+      />
     </>
   );
 }

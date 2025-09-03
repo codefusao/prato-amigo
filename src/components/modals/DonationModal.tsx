@@ -1,4 +1,6 @@
-import { useState, type FormEvent, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { X, Calendar, MapPin, Package } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -6,6 +8,7 @@ import { Textarea } from "../ui/Textarea";
 import { Select } from "../ui/Select";
 import { useDonations } from "../../contexts/DonationContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { donationSchema, type DonationFormData } from "../../schemas/donation";
 
 interface Donation {
   id: string;
@@ -45,57 +48,50 @@ export function DonationModal({
   donation = null,
   mode = "create",
 }: DonationModalProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [location, setLocation] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const today = new Date().toISOString().split("T")[0];
   const { addDonation, updateDonation } = useDonations();
   const { user } = useAuth();
 
   const isEditMode = mode === "edit" && donation;
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    setValue,
+  } = useForm<DonationFormData>({
+    resolver: zodResolver(donationSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      quantity: "",
+      category: "",
+      expirationDate: "",
+      location: "",
+    },
+  });
+
   useEffect(() => {
     if (isEditMode && donation) {
-      setTitle(donation.title);
-      setDescription(donation.description);
-      setQuantity(donation.quantity);
-      setCategory(donation.category);
-      setExpirationDate(donation.expirationDate);
-      setLocation(donation.location);
+      setValue("title", donation.title);
+      setValue("description", donation.description);
+      setValue("quantity", donation.quantity);
+      setValue("category", donation.category);
+      setValue("expirationDate", donation.expirationDate);
+      setValue("location", donation.location);
     } else if (!isOpen) {
-      setTitle("");
-      setDescription("");
-      setQuantity("");
-      setCategory("");
-      setExpirationDate("");
-      setLocation("");
+      reset();
     }
-  }, [donation, isEditMode, isOpen]);
+  }, [donation, isEditMode, isOpen, setValue, reset]);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: DonationFormData) => {
     try {
-      const donationData = {
-        title,
-        description,
-        quantity,
-        category,
-        expirationDate,
-        location,
-      };
-
       if (isEditMode && donation) {
-        updateDonation(donation.id, donationData);
+        updateDonation(donation.id, data);
       } else {
         addDonation({
-          ...donationData,
+          ...data,
           userId: user?.id || "",
         });
       }
@@ -106,8 +102,6 @@ export function DonationModal({
         isEditMode ? "Erro ao atualizar doação:" : "Erro ao cadastrar doação:",
         error
       );
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -150,65 +144,61 @@ export function DonationModal({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
               label="Título da Doação"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title")}
               placeholder="Ex: Arroz integral, 5kg"
+              error={errors.title?.message}
               required
             />
 
             <Select
               label="Categoria"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              {...register("category")}
               options={categories}
+              error={errors.category?.message}
               required
             />
 
             <Input
               label="Quantidade"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              {...register("quantity")}
               placeholder="Ex: 5kg, 10 unidades"
+              error={errors.quantity?.message}
               required
             />
 
-            <div className="relative">
-              <Input
-                label="Data de Validade"
-                type="date"
-                value={expirationDate}
-                onChange={(e) => setExpirationDate(e.target.value)}
-                min={today}
-                required
-                className="pl-10"
-              />
-              <Calendar className="absolute left-3 bottom-3 w-5 h-5 text-gray-400 pointer-events-none" />
-            </div>
+            <Input
+              label="Data de Validade"
+              type="date"
+              {...register("expirationDate")}
+              min={today}
+              error={errors.expirationDate?.message}
+              leftIcon={Calendar}
+              required
+            />
 
-            <div className="md:col-span-2 relative">
+            <div className="md:col-span-2">
               <Input
                 label="Local de Retirada"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                {...register("location")}
                 placeholder="Endereço completo para retirada"
-                className="pl-10"
+                leftIcon={MapPin}
+                error={errors.location?.message}
                 required
               />
-              <MapPin className="absolute left-3 bottom-3 w-5 h-5 text-gray-400 pointer-events-none" />
             </div>
 
-            <div className="md:col-span-2 relative">
+            <div className="md:col-span-2">
               <Textarea
                 label="Descrição Detalhada"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                {...register("description")}
                 placeholder="Descreva os alimentos, condições de conservação, horários disponíveis para retirada..."
-                className="pl-10"
+                leftIcon={Package}
                 rows={4}
+                error={errors.description?.message}
                 required
               />
             </div>
