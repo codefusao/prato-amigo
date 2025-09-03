@@ -13,6 +13,8 @@ import { Contact } from "./pages/Contact";
 import { Register } from "./pages/Register";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
+import { TermsOfUse } from "./pages/TermsOfUse";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
 function PageLoader() {
   return (
@@ -36,6 +38,8 @@ export default function App() {
               <Route path="contato" element={<Contact />} />
               <Route path="cadastro" element={<Register />} />
               <Route path="login" element={<Login />} />
+              <Route path="termos-de-uso" element={<TermsOfUse />} />
+              <Route path="politica-de-privacidade" element={<PrivacyPolicy />} />
             </Route>
 
             <Route

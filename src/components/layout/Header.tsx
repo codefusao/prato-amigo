@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router";
 import {
   Menu,
   X,
-  Leaf,
   User,
   LogOut,
   ChevronDown,
@@ -11,6 +10,7 @@ import {
 import { Button } from "../../components/ui/Button";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../contexts/AuthContext";
+import { Logo } from "../Logo";
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -37,11 +37,8 @@ export function Header() {
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-green-100 rounded-full group-hover:bg-green-200 transition-colors">
-              <Leaf className="w-6 h-6 text-green-600" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">Prato Amigo</span>
+          <Link to="/" className="group">
+            <Logo />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Button } from "../ui/Button";
@@ -183,19 +183,19 @@ export function RegisterForm() {
               />
               <label htmlFor="terms" className="text-sm text-gray-700">
                 Li e concordo com os{" "}
-                <a
-                  href="#"
+                <Link
+                  to="/termos-de-uso"
                   className="text-green-600 hover:text-green-700 font-medium underline"
                 >
                   Termos de Uso
-                </a>{" "}
+                </Link>{" "}
                 e{" "}
-                <a
-                  href="#"
+                <Link
+                  to="/politica-de-privacidade"
                   className="text-green-600 hover:text-green-700 font-medium underline"
                 >
                   Política de Privacidade
-                </a>
+                </Link>
               </label>
             </div>
             {errors.terms && (
