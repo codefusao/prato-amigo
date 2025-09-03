@@ -56,7 +56,7 @@ export function RegisterForm() {
 
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhone(e.target.value);
-    setValue("phone", formatted);
+    setValue("phone", formatted, { shouldValidate: true });
   };
 
   return (
@@ -112,6 +112,7 @@ export function RegisterForm() {
               onChange={handlePhoneChange}
               placeholder="(XX) XXXXX-XXXX"
               error={errors.phone?.message}
+              defaultValue=""
             />
           </div>
 

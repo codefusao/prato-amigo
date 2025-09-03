@@ -5,7 +5,10 @@ export const registerSchema = z
     type: z.string().min(1, "Selecione um tipo de cadastro"),
     name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
     email: z.string().email("Email inválido"),
-    phone: z.string().min(15, "Telefone inválido"),
+    phone: z
+      .string()
+      .min(14, "Telefone deve ter 11 dígitos")
+      .regex(/^\(\d{2}\) \d{4,5}-\d{4}$/, "Formato de telefone inválido"),
     address: z.string().min(5, "Endereço inválido"),
     city: z.string().min(2, "Cidade inválida"),
     state: z.string().min(1, "Selecione um estado"),
