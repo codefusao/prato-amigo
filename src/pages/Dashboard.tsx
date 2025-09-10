@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
 import { DonationModal } from "../components/modals/DonationModal";
 import { DonationList } from "../components/pages/dashboard/DonationList";
+import { AvailableDonations } from "../components/pages/dashboard/AvailableDonations";
+import { ReceiverRequests } from "../components/pages/dashboard/ReceiverRequests";
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -102,24 +104,26 @@ export function Dashboard() {
   };
 
   const ReceiverDashboard = () => {
+    const [activeTab, setActiveTab] = useState<"search" | "requests">("search");
+
     const receiverActions = [
       {
         title: "Buscar Doações",
         description: "Encontrar alimentos disponíveis",
         icon: Search,
-        action: () => {},
+        action: () => setActiveTab("search"),
         color: "blue",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
+        comingSoon: false,
       },
       {
         title: "Minhas Solicitações",
         description: "Ver pedidos realizados",
         icon: Package,
-        action: () => {},
+        action: () => setActiveTab("requests"),
         color: "green",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
+        comingSoon: false,
       },
       {
         title: "Histórico",
@@ -147,6 +151,8 @@ export function Dashboard() {
                 className={`p-4 border border-gray-200 rounded-lg transition-all group ${
                   action.disabled
                     ? "opacity-50 cursor-not-allowed bg-gray-50"
+                    : activeTab === action.title.toLowerCase().replace(" ", "")
+                    ? "border-blue-300 bg-blue-50 shadow-md"
                     : "hover:border-blue-300 hover:shadow-md cursor-pointer"
                 }`}
               >
@@ -178,26 +184,8 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Heart className="w-10 h-10 text-blue-600" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-            Bem-vindo ao Prato Amigo!
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Como receptor, você pode buscar doações de alimentos disponíveis na plataforma.
-            Em breve você poderá solicitar alimentos e acompanhar suas entregas.
-          </p>
-          <Link to="/como-funciona">
-            <Button
-              variant="outline"
-              className="text-blue-600 border-blue-200 hover:bg-blue-50"
-            >
-              Como funciona
-            </Button>
-          </Link>
-        </div>
+        {activeTab === "search" && <AvailableDonations />}
+        {activeTab === "requests" && <ReceiverRequests />}
       </>
     );
   };
