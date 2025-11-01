@@ -5,7 +5,6 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import Cookies from "js-cookie";
 
 interface User {
   id: string;
@@ -42,8 +41,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = () => {
       try {
-        const token = Cookies.get("auth_token");
-        const userData = Cookies.get("user_data");
+        const token = localStorage.getItem("auth_token");
+        const userData = localStorage.getItem("user_data");
 
         if (token && userData) {
           const parsedUser = JSON.parse(userData);
@@ -70,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error("Email e senha são obrigatórios");
       }
 
-      const existingUsers = Cookies.get("registered_users");
+      const existingUsers = localStorage.getItem("registered_users");
 
       if (!existingUsers) {
         return false;
@@ -85,8 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
       }
 
-      Cookies.set("auth_token", "auth_token_" + Date.now(), { expires: 7 });
-      Cookies.set("user_data", JSON.stringify(foundUser), { expires: 7 });
+      localStorage.setItem("auth_token", "auth_token_" + Date.now());
+      localStorage.setItem("user_data", JSON.stringify(foundUser));
 
       setUser(foundUser);
       return true;
@@ -108,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error("Todos os campos são obrigatórios");
       }
 
-      const existingUsers = Cookies.get("registered_users");
+      const existingUsers = localStorage.getItem("registered_users");
       const users = existingUsers ? JSON.parse(existingUsers) : [];
 
       if (users.some((u: any) => u.email === userData.email)) {
@@ -125,10 +124,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       
       users.push(newUser);
-      Cookies.set("registered_users", JSON.stringify(users), { expires: 365 });
+      localStorage.setItem("registered_users", JSON.stringify(users));
 
-      Cookies.set("auth_token", "auth_token_" + Date.now(), { expires: 7 });
-      Cookies.set("user_data", JSON.stringify(newUser), { expires: 7 });
+      localStorage.setItem("auth_token", "auth_token_" + Date.now());
+      localStorage.setItem("user_data", JSON.stringify(newUser));
 
       setUser(newUser);
       return true;
@@ -141,8 +140,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    Cookies.remove("auth_token");
-    Cookies.remove("user_data");
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_data");
     setUser(null);
   };
 

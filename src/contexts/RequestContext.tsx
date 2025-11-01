@@ -5,7 +5,6 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import Cookies from "js-cookie";
 
 interface DonationRequest {
   id: string;
@@ -40,7 +39,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
   const [requests, setRequests] = useState<DonationRequest[]>([]);
 
   useEffect(() => {
-    const savedRequests = Cookies.get("donation_requests");
+    const savedRequests = localStorage.getItem("donation_requests");
     if (savedRequests) {
       setRequests(JSON.parse(savedRequests));
     }
@@ -48,9 +47,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
 
   const saveRequests = (newRequests: DonationRequest[]) => {
     setRequests(newRequests);
-    Cookies.set("donation_requests", JSON.stringify(newRequests), {
-      expires: 365,
-    });
+    localStorage.setItem("donation_requests", JSON.stringify(newRequests));
   };
 
   const addRequest = (
