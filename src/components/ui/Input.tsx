@@ -13,7 +13,21 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, id, required, leftIcon: LeftIcon, rightIcon: RightIcon, onRightIconClick, ...props }, ref) => {
+  ({ className, label, error, id, required, leftIcon: LeftIcon, rightIcon: RightIcon, onRightIconClick, type, onChange, ...props }, ref) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === "date") {
+        const value = e.target.value;
+        if (value && value.length >= 4) {
+          const parts = value.split("-");
+          if (parts.length > 0 && parts[0].length > 4) {
+            const normalizedYear = parts[0].slice(-4);
+            e.target.value = [normalizedYear, ...parts.slice(1)].join("-");
+          }
+        }
+      }
+      onChange?.(e);
+    };
+
     return (
       <div className="w-full">
         {label && (
@@ -30,6 +44,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             id={id}
+            type={type}
             className={cn(
               "w-full py-3 border-2 rounded-lg transition-colors duration-200",
               "focus:outline-none focus:ring-4 focus:ring-green-100 focus:border-green-600",
@@ -38,6 +53,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               RightIcon ? "pr-10" : "pr-4",
               className
             )}
+            onChange={handleChange}
             {...props}
           />
           {RightIcon && (

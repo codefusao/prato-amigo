@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Plus, Package, BarChart3, Calendar, Clock, Search, Truck, Heart } from "lucide-react";
+import { Plus, Package, BarChart3, Calendar, Clock, Search, Truck } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
