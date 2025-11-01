@@ -170,10 +170,27 @@ export function DonationModal({
               required
             />
 
-            <Input
+              <Input
               label="Data de Validade"
               type="date"
-              {...register("expirationDate")}
+              {...register("expirationDate", {
+                onChange: (e) => {
+                  const input = e.target.value;
+                  const [year, month, day] = input.split("-");
+
+                  if (!year) return;
+
+                  let fixedYear = year;
+                  if (year.length > 4) fixedYear = year.slice(-4);
+
+                  const finalValue = [fixedYear, month, day]
+                    .filter(Boolean)
+                    .join("-");
+                  if (finalValue !== input) {
+                    e.target.value = finalValue;
+                  }
+                },
+              })}
               min={today}
               error={errors.expirationDate?.message}
               leftIcon={Calendar}

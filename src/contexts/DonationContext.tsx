@@ -29,6 +29,7 @@ interface DonationContextType {
   updateDonation: (id: string, updates: Partial<Donation>) => void;
   deleteDonation: (id: string) => void;
   getUserDonations: (userId: string) => Donation[];
+  reserveDonation: (id: string) => void;
 }
 
 const DonationContext = createContext<DonationContextType | undefined>(
@@ -82,12 +83,20 @@ export function DonationProvider({ children }: { children: ReactNode }) {
     return donations.filter((donation) => donation.userId === userId);
   };
 
+  const reserveDonation = (id: string) => {
+    const updatedDonations = donations.map((donation) =>
+      donation.id === id ? { ...donation, status: "reservado" as const } : donation
+    );
+    saveDonations(updatedDonations);
+  };
+
   const value: DonationContextType = {
     donations,
     addDonation,
     updateDonation,
     deleteDonation,
     getUserDonations,
+    reserveDonation,
   };
 
   return (
