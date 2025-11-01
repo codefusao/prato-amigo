@@ -8,6 +8,7 @@ import { ConfirmModal } from "../../shared/ConfirmModal";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useRequests } from "../../../contexts/RequestContext";
 import { useAuth } from "../../../contexts/AuthContext";
+import { formatDate, isExpiringSoon } from "../../../lib/dateUtils";
 
 export function AvailableDonations() {
   const { donations, reserveDonation } = useDonations();
@@ -115,18 +116,6 @@ export function AvailableDonations() {
       duration: 5000,
     });
     setDonationToRequest(null);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR");
-  };
-
-  const isExpiringSoon = (expirationDate: string) => {
-    const today = new Date();
-    const expDate = new Date(expirationDate);
-    const diffTime = expDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 3 && diffDays >= 0;
   };
 
   if (availableDonations.length === 0) {

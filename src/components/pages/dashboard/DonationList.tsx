@@ -5,6 +5,8 @@ import { useDonations } from "../../../contexts/DonationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ConfirmModal } from "../../shared/ConfirmModal";
 import { DonationModal } from "../../modals/DonationModal";
+import { formatDate } from "../../../lib/dateUtils";
+import { getStatusColor, getStatusText, donationStatusMap } from "../../../lib/statusUtils";
 
 export function DonationList() {
   const { donations, deleteDonation } = useDonations();
@@ -15,36 +17,6 @@ export function DonationList() {
   const [donationToDelete, setDonationToDelete] = useState<string | null>(null);
 
   const userDonations = donations.filter(donation => donation.userId === user?.id);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "disponivel":
-        return "bg-green-100 text-green-800";
-      case "reservado":
-        return "bg-yellow-100 text-yellow-800";
-      case "entregue":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "disponivel":
-        return "Disponível";
-      case "reservado":
-        return "Reservado";
-      case "entregue":
-        return "Entregue";
-      default:
-        return "Desconhecido";
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR");
-  };
 
   const handleDelete = (id: string) => {
     setDonationToDelete(id);
@@ -100,10 +72,11 @@ export function DonationList() {
                     <h4 className="font-semibold text-gray-900">{donation.title}</h4>
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        donation.status
+                        donation.status,
+                        donationStatusMap
                       )}`}
                     >
-                      {getStatusText(donation.status)}
+                      {getStatusText(donation.status, donationStatusMap)}
                     </span>
                   </div>
 

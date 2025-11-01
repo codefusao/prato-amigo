@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "react";
+import type { ChangeEvent, InputHTMLAttributes } from "react";
 import { forwardRef, type ComponentType } from "react";
 import { cn } from "../../lib/utils";
 import { Label } from "./Label";
@@ -14,7 +14,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, id, required, leftIcon: LeftIcon, rightIcon: RightIcon, onRightIconClick, type, onChange, ...props }, ref) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       if (type === "date") {
         const value = e.target.value;
         if (value && value.length >= 4) {

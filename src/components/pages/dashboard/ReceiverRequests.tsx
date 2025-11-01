@@ -6,6 +6,8 @@ import { useRequests } from "../../../contexts/RequestContext";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ConfirmModal } from "../../shared/ConfirmModal";
+import { formatDate, isExpiringSoon } from "../../../lib/dateUtils";
+import { getStatusColor, getStatusText, requestStatusMap } from "../../../lib/statusUtils";
 
 export function ReceiverRequests() {
   const { getUserRequests, deleteRequest } = useRequests();
@@ -15,36 +17,6 @@ export function ReceiverRequests() {
   const [requestToDelete, setRequestToDelete] = useState<string | null>(null);
 
   const userRequests = getUserRequests(user?.id || "");
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pendente":
-        return "bg-yellow-100 text-yellow-800";
-      case "aprovado":
-        return "bg-green-100 text-green-800";
-      case "rejeitado":
-        return "bg-red-100 text-red-800";
-      case "entregue":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "pendente":
-        return "Pendente";
-      case "aprovado":
-        return "Aprovado";
-      case "rejeitado":
-        return "Rejeitado";
-      case "entregue":
-        return "Entregue";
-      default:
-        return "Desconhecido";
-    }
-  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -59,10 +31,6 @@ export function ReceiverRequests() {
       default:
         return <AlertCircle className="w-4 h-4" />;
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
   const handleCancelRequest = (id: string) => {
@@ -85,14 +53,6 @@ export function ReceiverRequests() {
       });
       setRequestToDelete(null);
     }
-  };
-
-  const isExpiringSoon = (expirationDate: string) => {
-    const today = new Date();
-    const expDate = new Date(expirationDate);
-    const diffTime = expDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= 3 && diffDays >= 0;
   };
 
   if (userRequests.length === 0) {
@@ -132,11 +92,12 @@ export function ReceiverRequests() {
                     <h4 className="font-semibold text-gray-900">{request.donationTitle}</h4>
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full flex items-center gap-1 ${getStatusColor(
-                        request.status
+                        request.status,
+                        requestStatusMap
                       )}`}
                     >
                       {getStatusIcon(request.status)}
-                      {getStatusText(request.status)}
+                      {getStatusText(request.status, requestStatusMap)}
                     </span>
                     {isExpiringSoon(request.expirationDate) && (
                       <div className="flex items-center gap-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">

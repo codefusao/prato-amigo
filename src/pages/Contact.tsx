@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -10,8 +10,8 @@ import { Input } from "../components/ui/Input";
 import { Select } from "../components/ui/Select";
 import { Textarea } from "../components/ui/Textarea";
 import { Button } from "../components/ui/Button";
-import { formatPhone } from "../lib/formatPhone";
 import { contactSchema, type ContactFormData } from "../schemas/contact";
+import { createPhoneHandler } from "../lib/formUtils";
 import { contactTypeOptions } from "../data/constants";
 
 export function Contact() {
@@ -35,10 +35,7 @@ export function Contact() {
     setCharCount(0);
   };
 
-  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value);
-    setValue("phone", formatted);
-  };
+  const handlePhoneChange = createPhoneHandler(setValue, "phone");
 
   const faqItems = [
     {

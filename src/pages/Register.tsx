@@ -6,12 +6,11 @@ import { PageHeader } from "../components/shared/PageHeader";
 import { Input } from "../components/ui/Input";
 import { Select } from "../components/ui/Select";
 import { Button } from "../components/ui/Button";
-import { formatPhone } from "../lib/formatPhone";
 import { registerSchema, type RegisterFormData } from "../schemas/register";
 import { states, userTypeOptions } from "../data/constants";
 import { User, MapPin, Lock, CheckCircle } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import type { ChangeEvent } from "react";
+import { createPhoneHandler } from "../lib/formUtils";
 
 export function Register() {
   const { register: registerUser } = useAuth();
@@ -55,10 +54,7 @@ export function Register() {
     }
   };
 
-  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value);
-    setValue("phone", formatted, { shouldValidate: true });
-  };
+  const handlePhoneChange = createPhoneHandler(setValue, "phone", true);
 
   return (
     <>
