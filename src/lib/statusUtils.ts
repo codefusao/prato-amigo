@@ -1,3 +1,7 @@
+import { createElement } from "react";
+import { Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import type { ReactNode } from "react";
+
 type StatusConfig = {
   color: string;
   text: string;
@@ -11,6 +15,18 @@ export function getStatusColor(status: string, statusMap: StatusMap): string {
 
 export function getStatusText(status: string, statusMap: StatusMap): string {
   return statusMap[status]?.text || "Desconhecido";
+}
+
+export function getRequestStatusIcon(status: string): ReactNode {
+  const iconMap: Record<string, typeof Clock> = {
+    pendente: Clock,
+    aprovado: CheckCircle,
+    rejeitado: XCircle,
+    entregue: CheckCircle,
+  };
+
+  const Icon = iconMap[status] || AlertCircle;
+  return createElement(Icon, { className: "w-4 h-4" });
 }
 
 export const donationStatusMap: StatusMap = {

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Trash2, Edit, Calendar, MapPin, Package } from "lucide-react";
+import { Trash2, Edit, Package } from "lucide-react";
 import { Button } from "../../ui/Button";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ConfirmModal } from "../../shared/ConfirmModal";
 import { EmptyState } from "../../shared/EmptyState";
+import { DonationCard } from "../../shared/DonationCard";
+import { SectionHeader } from "../../shared/SectionHeader";
 import { DonationModal } from "../../modals/DonationModal";
 import { formatDate } from "../../../lib/dateUtils";
 import { getStatusColor, getStatusText, donationStatusMap } from "../../../lib/statusUtils";
@@ -49,55 +51,38 @@ export function DonationList() {
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Minhas Doações ({userDonations.length})
-          </h3>
-        </div>
+        <SectionHeader
+          title="Minhas Doações"
+          count={userDonations.length}
+        />
 
         <div className="space-y-4">
           {userDonations.map((donation) => (
-            <div
+            <DonationCard
               key={donation.id}
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-semibold text-gray-900">{donation.title}</h4>
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        donation.status,
-                        donationStatusMap
-                      )}`}
-                    >
-                      {getStatusText(donation.status, donationStatusMap)}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-600 text-sm mb-3">{donation.description}</p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Package className="w-4 h-4" />
-                      <span>{donation.quantity}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Calendar className="w-4 h-4" />
-                      <span>Válido até: {formatDate(donation.expirationDate)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      <span className="truncate">{donation.location}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 text-xs text-gray-500">
-                    Cadastrado em: {formatDate(donation.createdAt)}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 ml-4">
+              title={donation.title}
+              description={donation.description}
+              quantity={donation.quantity}
+              expirationDate={donation.expirationDate}
+              location={donation.location}
+              category={donation.category}
+              statusBadge={
+                <span
+                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                    donation.status,
+                    donationStatusMap
+                  )}`}
+                >
+                  {getStatusText(donation.status, donationStatusMap)}
+                </span>
+              }
+              gridCols={3}
+              defaultDate={{
+                label: "Cadastrado em",
+                value: formatDate(donation.createdAt),
+              }}
+              actionArea={
+                <>
                   <Button
                     variant="outline"
                     size="sm"
@@ -114,9 +99,9 @@ export function DonationList() {
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
-                </div>
-              </div>
-            </div>
+                </>
+              }
+            />
           ))}
         </div>
       </div>

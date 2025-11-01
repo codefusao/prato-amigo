@@ -27,3 +27,38 @@ export function isExpiringSoon(expirationDate: string): boolean {
   }
 }
 
+interface DateInfo {
+  label: string;
+  value: string;
+  highlight?: boolean;
+}
+
+interface RequestDates {
+  requestedAt: string;
+  approvedAt?: string;
+  deliveredAt?: string;
+}
+
+export function buildRequestDateInfo(dates: RequestDates): DateInfo[] {
+  const dateInfo: DateInfo[] = [
+    { label: "Solicitado em", value: formatDate(dates.requestedAt) },
+  ];
+
+  if (dates.approvedAt) {
+    dateInfo.push({
+      label: "Aprovado em",
+      value: formatDate(dates.approvedAt),
+    });
+  }
+
+  if (dates.deliveredAt) {
+    dateInfo.push({
+      label: "Entregue em",
+      value: formatDate(dates.deliveredAt),
+      highlight: true,
+    });
+  }
+
+  return dateInfo;
+}
+

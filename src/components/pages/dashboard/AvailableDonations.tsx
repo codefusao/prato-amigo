@@ -1,11 +1,13 @@
 import { useState, useMemo } from "react";
-import { Search, MapPin, Calendar, Package, Clock, Heart } from "lucide-react";
+import { Search, Package, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../../ui/Button";
 import { Input } from "../../ui/Input";
 import { Select } from "../../ui/Select";
 import { ConfirmModal } from "../../shared/ConfirmModal";
 import { EmptyState } from "../../shared/EmptyState";
+import { DonationCard } from "../../shared/DonationCard";
+import { SectionHeader } from "../../shared/SectionHeader";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useRequests } from "../../../contexts/RequestContext";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -132,9 +134,7 @@ export function AvailableDonations() {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Buscar Doações
-        </h3>
+        <SectionHeader title="Buscar Doações" className="mb-4" />
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
@@ -184,58 +184,41 @@ export function AvailableDonations() {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Doações Disponíveis ({filteredDonations.length})
-          </h3>
-        </div>
+        <SectionHeader
+          title="Doações Disponíveis"
+          count={filteredDonations.length}
+        />
 
         <div className="space-y-4">
           {filteredDonations.map((donation) => (
-            <div
+            <DonationCard
               key={donation.id}
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-semibold text-gray-900">{donation.title}</h4>
-                    {isExpiringSoon(donation.expirationDate) && (
-                      <div className="flex items-center gap-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+              title={donation.title}
+              description={donation.description}
+              quantity={donation.quantity}
+              expirationDate={donation.expirationDate}
+              location={donation.location}
+              category={donation.category}
+              additionalBadges={
+                isExpiringSoon(donation.expirationDate)
+                  ? [
+                      <div
+                        key="expiring"
+                        className="flex items-center gap-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium"
+                      >
                         <Clock className="w-3 h-3" />
                         Vencendo em breve
-                      </div>
-                    )}
-                  </div>
-
-                  <p className="text-gray-600 text-sm mb-3">{donation.description}</p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Package className="w-4 h-4" />
-                      <span>{donation.quantity}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Calendar className="w-4 h-4" />
-                      <span>Válido até: {formatDate(donation.expirationDate)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      <span className="truncate">{donation.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Heart className="w-4 h-4" />
-                      <span className="capitalize">{donation.category}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 text-xs text-gray-500">
-                    Publicado em: {formatDate(donation.createdAt)}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 ml-4">
-                  {hasUserRequestedDonation(donation.id) ? (
+                      </div>,
+                    ]
+                  : []
+              }
+              showCategoryIcon
+              defaultDate={{
+                label: "Publicado em",
+                value: formatDate(donation.createdAt),
+              }}
+              actionArea={
+                hasUserRequestedDonation(donation.id) ? (
                     <div className="flex items-center gap-2 text-sm">
                       <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                       <span className="text-yellow-600 font-medium">
@@ -249,10 +232,9 @@ export function AvailableDonations() {
                     >
                       Solicitar Doação
                     </Button>
-                  )}
-                </div>
-              </div>
-            </div>
+                )
+              }
+            />
           ))}
         </div>
 
