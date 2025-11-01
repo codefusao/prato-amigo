@@ -4,6 +4,13 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const quickLinks = [
+    { href: "/", label: "Início" },
+    { href: "/sobre", label: "Sobre" },
+    { href: "/como-funciona", label: "Como Funciona" },
+    { href: "/contato", label: "Contato" },
+  ];
+
   return (
     <footer className="bg-gray-900 text-white mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -21,12 +28,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
             <ul className="space-y-2">
-              {[
-                { href: "/", label: "Início" },
-                { href: "/sobre", label: "Sobre" },
-                { href: "/como-funciona", label: "Como Funciona" },
-                { href: "/contato", label: "Contato" },
-              ].map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}

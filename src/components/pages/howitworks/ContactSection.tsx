@@ -4,6 +4,20 @@ import { Button } from "../../ui/Button";
 import { Link } from "react-router";
 
 export function ContactSection() {
+  const contactInfo = [
+    {
+      icon: Mail,
+      title: "Email",
+      info: "contato@pratoamigo.com.br",
+    },
+    { icon: Phone, title: "Telefone", info: "(11) 99999-9999" },
+    {
+      icon: MapPin,
+      title: "Endereço",
+      info: "Av. Paulista, 1000 - São Paulo, SP",
+    },
+  ];
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -27,19 +41,7 @@ export function ContactSection() {
               </div>
 
               <div className="flex flex-col md:flex-row justify-center items-center gap-8">
-                {[
-                  {
-                    icon: Mail,
-                    title: "Email",
-                    info: "contato@pratoamigo.com.br",
-                  },
-                  { icon: Phone, title: "Telefone", info: "(11) 99999-9999" },
-                  {
-                    icon: MapPin,
-                    title: "Endereço",
-                    info: "Av. Paulista, 1000 - São Paulo, SP",
-                  },
-                ].map((contact, index) => (
+                {contactInfo.map((contact, index) => (
                   <div key={index} className="text-center">
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                       <contact.icon className="w-8 h-8 text-green-600" />
