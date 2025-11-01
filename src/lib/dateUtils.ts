@@ -1,8 +1,3 @@
-/**
- * Formata uma data string para o formato brasileiro (dd/mm/yyyy)
- * @param dateString - String da data no formato ISO ou similar
- * @returns String formatada no padrão brasileiro
- */
 export function formatDate(dateString: string): string {
   if (!dateString) return "";
   
@@ -13,11 +8,6 @@ export function formatDate(dateString: string): string {
   }
 }
 
-/**
- * Verifica se uma data de expiração está próxima (3 dias ou menos)
- * @param expirationDate - String da data de expiração
- * @returns true se a data expira em 3 dias ou menos
- */
 export function isExpiringSoon(expirationDate: string): boolean {
   if (!expirationDate) return false;
   

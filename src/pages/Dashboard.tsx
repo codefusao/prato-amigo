@@ -8,6 +8,7 @@ import { DonationModal } from "../components/modals/DonationModal";
 import { DonationList } from "../components/pages/dashboard/DonationList";
 import { AvailableDonations } from "../components/pages/dashboard/AvailableDonations";
 import { ReceiverRequests } from "../components/pages/dashboard/ReceiverRequests";
+import { ReceivedDonationsHistory } from "../components/pages/dashboard/ReceivedDonationsHistory";
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -104,7 +105,7 @@ export function Dashboard() {
   };
 
   const ReceiverDashboard = () => {
-    const [activeTab, setActiveTab] = useState<"search" | "requests">("search");
+    const [activeTab, setActiveTab] = useState<"search" | "requests" | "history">("search");
 
     const receiverActions = [
       {
@@ -112,6 +113,7 @@ export function Dashboard() {
         description: "Encontrar alimentos disponíveis",
         icon: Search,
         action: () => setActiveTab("search"),
+        tab: "search" as const,
         color: "blue",
         disabled: false,
         comingSoon: false,
@@ -121,6 +123,7 @@ export function Dashboard() {
         description: "Ver pedidos realizados",
         icon: Package,
         action: () => setActiveTab("requests"),
+        tab: "requests" as const,
         color: "green",
         disabled: false,
         comingSoon: false,
@@ -129,10 +132,11 @@ export function Dashboard() {
         title: "Histórico",
         description: "Doações recebidas",
         icon: BarChart3,
-        action: () => {},
+        action: () => setActiveTab("history"),
+        tab: "history" as const,
         color: "purple",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
+        comingSoon: false,
       },
     ];
 
@@ -151,7 +155,7 @@ export function Dashboard() {
                 className={`p-4 border border-gray-200 rounded-lg transition-all group ${
                   action.disabled
                     ? "opacity-50 cursor-not-allowed bg-gray-50"
-                    : activeTab === action.title.toLowerCase().replace(" ", "")
+                    : activeTab === action.tab
                     ? "border-blue-300 bg-blue-50 shadow-md"
                     : "hover:border-blue-300 hover:shadow-md cursor-pointer"
                 }`}
@@ -186,6 +190,7 @@ export function Dashboard() {
 
         {activeTab === "search" && <AvailableDonations />}
         {activeTab === "requests" && <ReceiverRequests />}
+        {activeTab === "history" && <ReceivedDonationsHistory />}
       </>
     );
   };

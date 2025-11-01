@@ -6,6 +6,7 @@ import { useRequests } from "../../../contexts/RequestContext";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ConfirmModal } from "../../shared/ConfirmModal";
+import { EmptyState } from "../../shared/EmptyState";
 import { formatDate, isExpiringSoon } from "../../../lib/dateUtils";
 import { getStatusColor, getStatusText, requestStatusMap } from "../../../lib/statusUtils";
 
@@ -57,17 +58,11 @@ export function ReceiverRequests() {
 
   if (userRequests.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Package className="w-10 h-10 text-gray-400" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          Nenhuma solicitação realizada
-        </h3>
-        <p className="text-gray-600 mb-6">
-          Você ainda não fez nenhuma solicitação de doação. Explore as doações disponíveis para começar.
-        </p>
-      </div>
+      <EmptyState
+        icon={Package}
+        title="Nenhuma solicitação realizada"
+        description="Você ainda não fez nenhuma solicitação de doação. Explore as doações disponíveis para começar."
+      />
     );
   }
 

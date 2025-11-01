@@ -4,6 +4,7 @@ import { Button } from "../../ui/Button";
 import { useDonations } from "../../../contexts/DonationContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { ConfirmModal } from "../../shared/ConfirmModal";
+import { EmptyState } from "../../shared/EmptyState";
 import { DonationModal } from "../../modals/DonationModal";
 import { formatDate } from "../../../lib/dateUtils";
 import { getStatusColor, getStatusText, donationStatusMap } from "../../../lib/statusUtils";
@@ -37,17 +38,11 @@ export function DonationList() {
 
   if (userDonations.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Package className="w-10 h-10 text-gray-400" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          Nenhuma doação cadastrada
-        </h3>
-        <p className="text-gray-600 mb-6">
-          Comece cadastrando sua primeira doação para ajudar pessoas em necessidade.
-        </p>
-      </div>
+      <EmptyState
+        icon={Package}
+        title="Nenhuma doação cadastrada"
+        description="Comece cadastrando sua primeira doação para ajudar pessoas em necessidade."
+      />
     );
   }
 
