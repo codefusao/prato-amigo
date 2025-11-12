@@ -31,7 +31,7 @@ export function HowItWorks() {
       number: "3",
       title: "Solicitação e Agendamento",
       description:
-        "Receptores visualizam doações disponíveis e solicitam os itens de interesse, agendando a retirada ou solicitando entrega.",
+        "Receptores visualizam doações disponíveis e solicitam os itens de interesse.",
       icon: Calendar,
       highlight: "Sistema de agendamento inteligente para otimizar o processo",
     },

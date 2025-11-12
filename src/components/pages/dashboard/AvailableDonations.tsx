@@ -107,6 +107,7 @@ export function AvailableDonations() {
       donorId: donationToRequest.userId,
       donorName: "Doador", 
       donorLocation: donationToRequest.location,
+      donationDescription: donationToRequest.description,
       quantity: donationToRequest.quantity,
       category: donationToRequest.category,
       expirationDate: donationToRequest.expirationDate,

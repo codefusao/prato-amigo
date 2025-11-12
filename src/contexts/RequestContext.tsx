@@ -16,9 +16,11 @@ interface DonationRequest {
   requestedAt: string;
   approvedAt?: string;
   deliveredAt?: string;
+  voluntaryId?: string;
   donorId: string;
   donorName: string;
   donorLocation: string;
+  donationDescription: string;
   quantity: string;
   category: string;
   expirationDate: string;
@@ -26,10 +28,14 @@ interface DonationRequest {
 
 interface RequestContextType {
   requests: DonationRequest[];
-  addRequest: (request: Omit<DonationRequest, "id" | "requestedAt" | "status">) => void;
+  addRequest: (
+    request: Omit<DonationRequest, "id" | "requestedAt" | "status">
+  ) => void;
   updateRequest: (id: string, updates: Partial<DonationRequest>) => void;
   deleteRequest: (id: string) => void;
+  getApprovedRequests: () => DonationRequest[];
   getUserRequests: (userId: string) => DonationRequest[];
+  getDonorRequests: (donorId: string) => DonationRequest[];
   getDonationRequests: (donationId: string) => DonationRequest[];
 }
 
@@ -76,8 +82,16 @@ export function RequestProvider({ children }: { children: ReactNode }) {
     saveRequests(updatedRequests);
   };
 
+  const getApprovedRequests = () => {
+    return requests.filter((request) => request.status === "aprovado");
+  };
+
   const getUserRequests = (userId: string) => {
     return requests.filter((request) => request.userId === userId);
+  };
+
+  const getDonorRequests = (donorId: string) => {
+    return requests.filter((request) => request.donorId === donorId);
   };
 
   const getDonationRequests = (donationId: string) => {
@@ -89,14 +103,14 @@ export function RequestProvider({ children }: { children: ReactNode }) {
     addRequest,
     updateRequest,
     deleteRequest,
+    getApprovedRequests,
     getUserRequests,
+    getDonorRequests,
     getDonationRequests,
   };
 
   return (
-    <RequestContext.Provider value={value}>
-      {children}
-    </RequestContext.Provider>
+    <RequestContext.Provider value={value}>{children}</RequestContext.Provider>
   );
 }
 

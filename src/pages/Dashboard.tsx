@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { Plus, Package, BarChart3, Calendar, Search, Truck } from "lucide-react";
+import {
+  Plus,
+  Package,
+  BarChart3,
+  Calendar,
+  Search,
+  Truck,
+} from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
@@ -10,58 +17,79 @@ import { DonationList } from "../components/pages/dashboard/DonationList";
 import { AvailableDonations } from "../components/pages/dashboard/AvailableDonations";
 import { ReceiverRequests } from "../components/pages/dashboard/ReceiverRequests";
 import { ReceivedDonationsHistory } from "../components/pages/dashboard/ReceivedDonationsHistory";
+import { ViewPendingDonations } from "@/components/pages/dashboard/ViewpendingDonations";
+import { ViewDeliveriesDonations } from "@/components/pages/dashboard/ViewDeliveriesDonations";
+import { ReportsDonnor } from "@/components/pages/dashboard/ReportsDonnor";
+import { ViewDeliveries } from "@/components/pages/dashboard/ViewDeliveries";
+import { VolunteerDeliveries } from "@/components/pages/dashboard/VolunteerDeliveries";
+import { ReportsVoluntary } from "@/components/pages/dashboard/ReportsVoluntary";
 
 export function Dashboard() {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const DonorDashboard = () => {
+    const [activeTab, setActiveTab] = useState<
+      "donation" | "view" | "delivery" | "reports"
+    >("donation");
+
     const donorActions = [
-    {
-      title: "Nova Doação",
-      description: "Registrar alimentos disponíveis",
-      icon: Plus,
-        action: () => setIsModalOpen(true),
-      color: "green",
+      {
+        title: "Nova Doação",
+        description: "Registrar alimentos disponíveis",
+        icon: Plus,
+        action: () => {
+          setActiveTab("donation");
+          setIsModalOpen(true);
+        },
+        color: "green",
         disabled: false,
-    },
-    {
-      title: "Ver Solicitações",
-      description: "Visualizar pedidos pendentes",
-      icon: Package,
-        action: () => {},
-      color: "blue",
-        disabled: true,
-        comingSoon: true,
-    },
-    {
-      title: "Agendar Entrega",
-      description: "Programar retirada ou entrega",
-      icon: Calendar,
-        action: () => {},
-      color: "purple",
-        disabled: true,
-        comingSoon: true,
-    },
-    {
-      title: "Relatórios",
-      description: "Ver estatísticas e impacto",
-      icon: BarChart3,
-        action: () => {},
+      },
+      {
+        title: "Ver Solicitações",
+        description: "Visualizar pedidos pendentes",
+        icon: Package,
+        action: () => setActiveTab("view"),
+        color: "blue",
+        disabled: false,
+      },
+      {
+        title: "Pronto para Entrega",
+        description: "Pronto para entrega",
+        icon: Calendar,
+        action: () => setActiveTab("delivery"),
+        color: "purple",
+        disabled: false,
+      },
+      {
+        title: "Relatórios",
+        description: "Ver estatísticas e impacto",
+        icon: BarChart3,
+        action: () => setActiveTab("reports"),
         color: "orange",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
       },
     ];
 
-  const DonorDashboard = () => (
-    <>
-      <QuickActionsGrid actions={donorActions} columns={4} />
-        <DonationList />
+    return (
+      <>
+        <QuickActionsGrid
+          actions={donorActions}
+          activeTab={activeTab}
+          columns={4}
+        />
+        {activeTab === "donation" && <DonationList />}
+        {activeTab === "view" && <ViewPendingDonations />}
+        {activeTab === "delivery" && <ViewDeliveriesDonations />}
+        {activeTab === "reports" && <ReportsDonnor />}
       </>
     );
+  };
 
   const ReceiverDashboard = () => {
-    const [activeTab, setActiveTab] = useState<"search" | "requests" | "history">("search");
+    const [activeTab, setActiveTab] = useState<
+      "search" | "requests" | "history"
+    >("search");
 
     const receiverActions = [
       {
@@ -95,7 +123,11 @@ export function Dashboard() {
 
     return (
       <>
-        <QuickActionsGrid actions={receiverActions} activeTab={activeTab} columns={3} />
+        <QuickActionsGrid
+          actions={receiverActions}
+          activeTab={activeTab}
+          columns={3}
+        />
         {activeTab === "search" && <AvailableDonations />}
         {activeTab === "requests" && <ReceiverRequests />}
         {activeTab === "history" && <ReceivedDonationsHistory />}
@@ -103,61 +135,48 @@ export function Dashboard() {
     );
   };
 
+  const VolunteerDashboard = () => {
+     const [activeTab, setActiveTab] = useState<
+      "view-deliveries" | "my-deliveries"| "reports"
+    >("view-deliveries");
+
     const volunteerActions = [
       {
         title: "Ver Entregas",
-        description: "Visualizar entregas pendentes",
+        description: "Visualizar entregas",
         icon: Truck,
-        action: () => {},
+        action: () => setActiveTab('view-deliveries'),
         color: "green",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
       },
       {
         title: "Minhas Entregas",
-        description: "Histórico de entregas realizadas",
+        description: "Histórico de entregas pendentes e realizadas",
         icon: Package,
-        action: () => {},
+        action: () => setActiveTab('my-deliveries'),
         color: "blue",
-        disabled: true,
-        comingSoon: true,
+        disabled: false,
       },
       {
         title: "Relatórios",
         description: "Ver estatísticas de impacto",
         icon: BarChart3,
-        action: () => {},
-      color: "orange",
-        disabled: true,
-        comingSoon: true,
+        action: () => setActiveTab('reports'),
+        color: "orange",
+        disabled: false,
       },
     ];
 
-  const VolunteerDashboard = () => (
-    <>
-      <QuickActionsGrid actions={volunteerActions} columns={3} />
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Truck className="w-10 h-10 text-green-600" />
-          </div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-            Bem-vindo ao Prato Amigo!
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Como voluntário, você pode ajudar no transporte de doações entre doadores e receptores.
-            Em breve você poderá ver entregas disponíveis e se voluntariar para realizá-las.
-          </p>
-          <Link to="/como-funciona">
-            <Button
-              variant="outline"
-              className="text-green-600 border-green-200 hover:bg-green-50"
-            >
-              Como funciona
-            </Button>
-          </Link>
-        </div>
+    return (
+      <>
+        <QuickActionsGrid actions={volunteerActions} columns={3} 
+          activeTab={activeTab}/>
+        {activeTab === "view-deliveries" && <ViewDeliveries />}
+        {activeTab === "my-deliveries" && <VolunteerDeliveries />}
+        {activeTab === "reports" && <ReportsVoluntary />}
       </>
     );
+  };
 
   const renderDashboard = () => {
     switch (user?.role) {
@@ -204,9 +223,9 @@ export function Dashboard() {
       </div>
 
       {user?.role === "doador" && (
-        <DonationModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
+        <DonationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
           mode="create"
         />
       )}
