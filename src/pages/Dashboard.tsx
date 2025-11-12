@@ -17,7 +17,7 @@ import { DonationList } from "../components/pages/dashboard/DonationList";
 import { AvailableDonations } from "../components/pages/dashboard/AvailableDonations";
 import { ReceiverRequests } from "../components/pages/dashboard/ReceiverRequests";
 import { ReceivedDonationsHistory } from "../components/pages/dashboard/ReceivedDonationsHistory";
-import { ViewPendingDonations } from "@/components/pages/dashboard/ViewpendingDonations";
+import { ViewPendingDonations } from "@/components/pages/dashboard/ViewPendingDonations";
 import { ViewDeliveriesDonations } from "@/components/pages/dashboard/ViewDeliveriesDonations";
 import { ReportsDonnor } from "@/components/pages/dashboard/ReportsDonnor";
 import { ViewDeliveries } from "@/components/pages/dashboard/ViewDeliveries";
