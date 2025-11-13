@@ -45,78 +45,75 @@ export function DonationList() {
     setEditModalOpen(true);
   };
 
-  if (userDonations.length === 0) {
-    return (
-      <EmptyState
-        icon={Package}
-        title="Nenhuma doação cadastrada"
-        description="Comece cadastrando sua primeira doação para ajudar pessoas em necessidade."
-      />
-    );
-  }
-
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <SectionHeader title="Minhas Doações" count={userDonations.length} />
-
-        <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
-
-        <DonationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          mode="create"
+      {userDonations.length === 0 ? (
+        <EmptyState
+          icon={Package}
+          title="Nenhuma doação cadastrada"
+          description="Comece cadastrando sua primeira doação para ajudar pessoas em necessidade."
+          action={
+            <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
+          }
         />
+      ) : (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <SectionHeader title="Minhas Doações" count={userDonations.length} />
 
-        <div className="space-y-4">
-          {userDonations.map((donation) => (
-            <DonationCard
-              key={donation.id}
-              title={donation.title}
-              description={donation.description}
-              quantity={donation.quantity}
-              expirationDate={donation.expirationDate}
-              location={donation.location}
-              category={donation.category}
-              statusBadge={
-                <span
-                  className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                    donation.status,
-                    donationStatusMap
-                  )}`}
-                >
-                  {getStatusText(donation.status, donationStatusMap)}
-                </span>
-              }
-              gridCols={3}
-              defaultDate={{
-                label: "Cadastrado em",
-                value: formatDate(donation.createdAt),
-              }}
-              actionArea={
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-gray-600 hover:text-gray-800"
-                    onClick={() => handleEdit(donation)}
+          <div className="flex justify-end mb-4">
+            <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
+          </div>
+
+          <div className="space-y-4">
+            {userDonations.map((donation) => (
+              <DonationCard
+                key={donation.id}
+                title={donation.title}
+                description={donation.description}
+                quantity={donation.quantity}
+                expirationDate={donation.expirationDate}
+                location={donation.location}
+                category={donation.category}
+                statusBadge={
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                      donation.status,
+                      donationStatusMap
+                    )}`}
                   >
-                    <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                    onClick={() => handleDelete(donation.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </>
-              }
-            />
-          ))}
+                    {getStatusText(donation.status, donationStatusMap)}
+                  </span>
+                }
+                gridCols={3}
+                defaultDate={{
+                  label: "Cadastrado em",
+                  value: formatDate(donation.createdAt),
+                }}
+                actionArea={
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-gray-600 hover:text-gray-800"
+                      onClick={() => handleEdit(donation)}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 hover:text-red-800 hover:bg-red-50"
+                      onClick={() => handleDelete(donation.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </>
+                }
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <ConfirmModal
         isOpen={deleteModalOpen}
@@ -127,6 +124,12 @@ export function DonationList() {
         confirmText="Excluir"
         cancelText="Cancelar"
         type="danger"
+      />
+
+      <DonationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        mode="create"
       />
 
       <DonationModal
