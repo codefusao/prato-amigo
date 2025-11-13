@@ -35,6 +35,7 @@ interface RequestContextType {
   deleteRequest: (id: string) => void;
   getApprovedRequests: () => DonationRequest[];
   getUserRequests: (userId: string) => DonationRequest[];
+  getVoluntaryRequests: (voluntaryId: string) => DonationRequest[];
   getDonorRequests: (donorId: string) => DonationRequest[];
   getDonationRequests: (donationId: string) => DonationRequest[];
 }
@@ -90,6 +91,10 @@ export function RequestProvider({ children }: { children: ReactNode }) {
     return requests.filter((request) => request.userId === userId);
   };
 
+  const getVoluntaryRequests = (voluntaryId: string) => {
+    return requests.filter((request) => request.voluntaryId === voluntaryId);
+  };
+
   const getDonorRequests = (donorId: string) => {
     return requests.filter((request) => request.donorId === donorId);
   };
@@ -105,6 +110,7 @@ export function RequestProvider({ children }: { children: ReactNode }) {
     deleteRequest,
     getApprovedRequests,
     getUserRequests,
+    getVoluntaryRequests,
     getDonorRequests,
     getDonationRequests,
   };

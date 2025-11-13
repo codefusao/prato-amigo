@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router";
 import {
   Plus,
   Package,
@@ -8,11 +7,9 @@ import {
   Search,
   Truck,
 } from "lucide-react";
-import { Button } from "../components/ui/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PageHeader } from "../components/shared/PageHeader";
 import { QuickActionsGrid } from "../components/shared/QuickActionsGrid";
-import { DonationModal } from "../components/modals/DonationModal";
 import { DonationList } from "../components/pages/dashboard/DonationList";
 import { AvailableDonations } from "../components/pages/dashboard/AvailableDonations";
 import { ReceiverRequests } from "../components/pages/dashboard/ReceiverRequests";
@@ -26,7 +23,6 @@ import { ReportsVoluntary } from "@/components/pages/dashboard/ReportsVoluntary"
 
 export function Dashboard() {
   const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const DonorDashboard = () => {
     const [activeTab, setActiveTab] = useState<
@@ -35,12 +31,11 @@ export function Dashboard() {
 
     const donorActions = [
       {
-        title: "Nova Doação",
-        description: "Registrar alimentos disponíveis",
+        title: "Doações",
+        description: "Visualizar doações disponíveis",
         icon: Plus,
         action: () => {
           setActiveTab("donation");
-          setIsModalOpen(true);
         },
         color: "green",
         disabled: false,
@@ -136,8 +131,8 @@ export function Dashboard() {
   };
 
   const VolunteerDashboard = () => {
-     const [activeTab, setActiveTab] = useState<
-      "view-deliveries" | "my-deliveries"| "reports"
+    const [activeTab, setActiveTab] = useState<
+      "view-deliveries" | "my-deliveries" | "reports"
     >("view-deliveries");
 
     const volunteerActions = [
@@ -145,7 +140,7 @@ export function Dashboard() {
         title: "Ver Entregas",
         description: "Visualizar entregas",
         icon: Truck,
-        action: () => setActiveTab('view-deliveries'),
+        action: () => setActiveTab("view-deliveries"),
         color: "green",
         disabled: false,
       },
@@ -153,7 +148,7 @@ export function Dashboard() {
         title: "Minhas Entregas",
         description: "Histórico de entregas pendentes e realizadas",
         icon: Package,
-        action: () => setActiveTab('my-deliveries'),
+        action: () => setActiveTab("my-deliveries"),
         color: "blue",
         disabled: false,
       },
@@ -161,7 +156,7 @@ export function Dashboard() {
         title: "Relatórios",
         description: "Ver estatísticas de impacto",
         icon: BarChart3,
-        action: () => setActiveTab('reports'),
+        action: () => setActiveTab("reports"),
         color: "orange",
         disabled: false,
       },
@@ -169,8 +164,11 @@ export function Dashboard() {
 
     return (
       <>
-        <QuickActionsGrid actions={volunteerActions} columns={3} 
-          activeTab={activeTab}/>
+        <QuickActionsGrid
+          actions={volunteerActions}
+          columns={3}
+          activeTab={activeTab}
+        />
         {activeTab === "view-deliveries" && <ViewDeliveries />}
         {activeTab === "my-deliveries" && <VolunteerDeliveries />}
         {activeTab === "reports" && <ReportsVoluntary />}
@@ -221,14 +219,6 @@ export function Dashboard() {
 
         {renderDashboard()}
       </div>
-
-      {user?.role === "doador" && (
-        <DonationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          mode="create"
-        />
-      )}
     </>
   );
 }

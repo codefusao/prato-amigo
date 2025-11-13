@@ -4,13 +4,13 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { EmptyState } from "../../shared/EmptyState";
 
 export function ReportsVoluntary() {
-  const { getApprovedRequests } = useRequests();
+  const { getVoluntaryRequests } = useRequests();
   const { user } = useAuth();
 
-  const userRequests = getApprovedRequests().filter(
-    (r) => r.voluntaryId === user?.id
-  );
-
+  const userRequests = getVoluntaryRequests(user?.id || "");
+  console.log(userRequests);
+  console.log("userRequests");
+  console.log(user);
   const total = userRequests.length;
   const approved = userRequests.filter((r) => r.status === "aprovado").length;
   const delivered = userRequests.filter((r) => r.status === "entregue").length;

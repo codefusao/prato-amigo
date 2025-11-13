@@ -12,6 +12,7 @@ import { useDonations } from "../../../contexts/DonationContext";
 import { useRequests } from "../../../contexts/RequestContext";
 import { useAuth } from "../../../contexts/AuthContext";
 import { formatDate, isExpiringSoon } from "../../../lib/dateUtils";
+import { categories } from "@/components/modals/DonationModal";
 
 export function AvailableDonations() {
   const { donations, reserveDonation } = useDonations();
@@ -27,28 +28,15 @@ export function AvailableDonations() {
     (donation) => donation.status === "disponivel"
   );
 
-  
-
-
   const hasUserRequestedDonation = (donationId: string) => {
     if (!user) return false;
     return requests.some(
-      (request) => 
-        request.userId === user.id && 
+      (request) =>
+        request.userId === user.id &&
         request.donationId === donationId &&
         (request.status === "pendente" || request.status === "aprovado")
     );
   };
-
-  const categories = [
-    "Frutas e Verduras",
-    "Cereais e Grãos",
-    "Laticínios",
-    "Carnes e Aves",
-    "Pães e Massas",
-    "Enlatados",
-    "Outros",
-  ];
 
   const filteredDonations = useMemo(() => {
     let filtered = availableDonations;
@@ -57,23 +45,34 @@ export function AvailableDonations() {
       filtered = filtered.filter(
         (donation) =>
           donation.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          donation.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          donation.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
           donation.location.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (selectedCategory) {
-      filtered = filtered.filter((donation) => donation.category === selectedCategory);
+      filtered = filtered.filter(
+        (donation) => donation.category === selectedCategory
+      );
     }
 
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "newest":
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
         case "oldest":
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
         case "expiring":
-          return new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
+          return (
+            new Date(a.expirationDate).getTime() -
+            new Date(b.expirationDate).getTime()
+          );
         case "location":
           return a.location.localeCompare(b.location);
         default:
@@ -86,15 +85,16 @@ export function AvailableDonations() {
 
   const handleRequestDonation = (donation: any) => {
     if (!user) return;
-    
+
     if (hasUserRequestedDonation(donation.id)) {
       toast.error("Você já solicitou esta doação!", {
-        description: "Aguarde a resposta do doador ou cancele a solicitação anterior.",
+        description:
+          "Aguarde a resposta do doador ou cancele a solicitação anterior.",
         duration: 5000,
       });
       return;
     }
-    
+
     setDonationToRequest(donation);
     setConfirmModalOpen(true);
   };
@@ -108,7 +108,7 @@ export function AvailableDonations() {
       donationTitle: donationToRequest.title,
       message: `Solicitação de doação para ${donationToRequest.title}`,
       donorId: donationToRequest.userId,
-      donorName: "Doador", 
+      donorName: "Doador",
       donorLocation: donationToRequest.location,
       donationDescription: donationToRequest.description,
       quantity: donationToRequest.quantity,
@@ -139,7 +139,7 @@ export function AvailableDonations() {
     <div className="space-y-6">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <SectionHeader title="Buscar Doações" className="mb-4" />
-        
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -150,29 +150,26 @@ export function AvailableDonations() {
               className="pl-10"
             />
           </div>
-          
+
           <Select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="">Todas as categorias</option>
             {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+              <option key={category.value} value={category.value}>
+                {category.label}
               </option>
             ))}
           </Select>
-          
-          <Select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
+
+          <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
             <option value="newest">Mais recentes</option>
             <option value="oldest">Mais antigas</option>
             <option value="expiring">Vencendo em breve</option>
             <option value="location">Por localização</option>
           </Select>
-          
+
           <Button
             variant="outline"
             onClick={() => {
@@ -223,19 +220,19 @@ export function AvailableDonations() {
               }}
               actionArea={
                 hasUserRequestedDonation(donation.id) ? (
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                      <span className="text-yellow-600 font-medium">
-                        Já solicitado
-                      </span>
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={() => handleRequestDonation(donation)}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      Solicitar Doação
-                    </Button>
+                  <div className="flex items-center gap-2 text-sm">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-yellow-600 font-medium">
+                      Já solicitado
+                    </span>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={() => handleRequestDonation(donation)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Solicitar Doação
+                  </Button>
                 )
               }
             />

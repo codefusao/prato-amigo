@@ -28,8 +28,8 @@ export function VolunteerDeliveries() {
     (r) => r.voluntaryId === user?.id
   );
   
-  const handleOpenModal = (id: string) => {
-    setDelivery(id);
+  const handleOpenModal = (delivery: any) => {
+    setDelivery(delivery);
     setConfirmModalOpen(true);
   };
 
@@ -108,12 +108,12 @@ export function VolunteerDeliveries() {
               })}
               actionArea={
                 <>
-                  {delivery.status === "pendente" && (
+                  {delivery.status === "aprovado" && (
                     <Button
                       variant="outline"
                       size="sm"
                       className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                      onClick={() => handleOpenModal(delivery.id)}
+                      onClick={() => handleOpenModal(delivery)}
                     >
                       Confirmar Entrega
                     </Button>
@@ -130,7 +130,7 @@ export function VolunteerDeliveries() {
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDelivery}
         title="Confirma Entrega"
-        message={`Tem certeza que deseja confirmar a entrega da doação "${delivery?.title}"?`}
+        message={`Tem certeza que deseja confirmar a entrega da doação "${delivery?.donationTitle}"?`}
         confirmText="Confirmar"
         cancelText="Cancelar"
         type="danger"

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { categories } from "@/components/modals/DonationModal";
 
 export function ViewDeliveries() {
   const { user } = useAuth();
@@ -33,16 +34,6 @@ export function ViewDeliveries() {
         (request.status === "aprovado" || request.status === "entregue")
     );
   };
-
-  const categories = [
-    "Frutas e Verduras",
-    "Cereais e Grãos",
-    "Laticínios",
-    "Carnes e Aves",
-    "Pães e Massas",
-    "Enlatados",
-    "Outros",
-  ];
 
   const filteredDonations = useMemo(() => {
     let filtered = approvedRequests;
@@ -153,8 +144,8 @@ export function ViewDeliveries() {
           >
             <option value="">Todas as categorias</option>
             {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+              <option key={category.value} value={category.value}>
+                {category.label}
               </option>
             ))}
           </Select>
@@ -255,7 +246,7 @@ export function ViewDeliveries() {
         onConfirm={confirmPickupDelivery}
         title="Assumir Entrega"
         message={`Tem certeza que deseja assumir a entrega da doação "${delivery?.donationTitle}"?`}
-        confirmText="Solicitar"
+        confirmText="Assumir"
         cancelText="Cancelar"
         type="info"
       />

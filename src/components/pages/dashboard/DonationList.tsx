@@ -9,7 +9,11 @@ import { DonationCard } from "../../shared/DonationCard";
 import { SectionHeader } from "../../shared/SectionHeader";
 import { DonationModal } from "../../modals/DonationModal";
 import { formatDate } from "../../../lib/dateUtils";
-import { getStatusColor, getStatusText, donationStatusMap } from "../../../lib/statusUtils";
+import {
+  getStatusColor,
+  getStatusText,
+  donationStatusMap,
+} from "../../../lib/statusUtils";
 
 export function DonationList() {
   const { donations, deleteDonation } = useDonations();
@@ -18,10 +22,11 @@ export function DonationList() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedDonation, setSelectedDonation] = useState<any>(null);
   const [donationToDelete, setDonationToDelete] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const userDonations = donations.filter(donation => donation.userId === user?.id);
-
-  
+  const userDonations = donations.filter(
+    (donation) => donation.userId === user?.id
+  );
 
   const handleDelete = (id: string) => {
     setDonationToDelete(id);
@@ -53,9 +58,14 @@ export function DonationList() {
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <SectionHeader
-          title="Minhas Doações"
-          count={userDonations.length}
+        <SectionHeader title="Minhas Doações" count={userDonations.length} />
+
+        <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
+
+        <DonationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          mode="create"
         />
 
         <div className="space-y-4">
