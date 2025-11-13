@@ -134,7 +134,7 @@ export function ViewPendingDonations() {
                       className="text-red-600 hover:text-red-800 hover:bg-red-50"
                       onClick={() => handleOpenModal(request.id)}
                     >
-                      Arovar/Rejeitar
+                      Aprovar/Rejeitar
                     </Button>
                   )}
                 </>

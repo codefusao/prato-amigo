@@ -23,6 +23,8 @@ export function ViewDeliveries() {
 
   const approvedRequests = getApprovedRequests().filter((r) => !r.voluntaryId);
 
+  console.log(approvedRequests)
+
   const hasVolunteerAcceptedDonation = (donationId: string) => {
     if (!user) return false;
     return requests.some(
@@ -253,7 +255,7 @@ export function ViewDeliveries() {
         }}
         onConfirm={confirmPickupDelivery}
         title="Assumir Entrega"
-        message={`Tem certeza que deseja assumir a entrega da doação "${delivery?.title}"?`}
+        message={`Tem certeza que deseja assumir a entrega da doação "${delivery?.donationTitle}"?`}
         confirmText="Solicitar"
         cancelText="Cancelar"
         type="info"
