@@ -58,11 +58,13 @@ export function DonationList() {
         />
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <SectionHeader title="Minhas Doações" count={userDonations.length} />
-
-          <div className="flex justify-end mb-4">
-            <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
-          </div>
+          <SectionHeader 
+            title="Minhas Doações" 
+            count={userDonations.length}
+            action={
+              <Button onClick={() => setIsModalOpen(true)}>Nova Doação</Button>
+            }
+          />
 
           <div className="space-y-4">
             {userDonations.map((donation) => (
