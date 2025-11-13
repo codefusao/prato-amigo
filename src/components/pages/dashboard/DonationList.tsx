@@ -21,6 +21,8 @@ export function DonationList() {
 
   const userDonations = donations.filter(donation => donation.userId === user?.id);
 
+  
+
   const handleDelete = (id: string) => {
     setDonationToDelete(id);
     setDeleteModalOpen(true);

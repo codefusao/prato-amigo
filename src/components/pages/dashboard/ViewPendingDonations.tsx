@@ -28,6 +28,8 @@ export function ViewPendingDonations() {
     (r) => r.status === "pendente"
   );
 
+  
+
   const handleOpenModal = (id: string) => {
     setRequestToHandle(id);
     setApprovalModalOpen(true);

@@ -26,6 +26,8 @@ export function ReceiverRequests() {
 
   const userRequests = getUserRequests(user?.id || "");
 
+  
+
   const handleCancelRequest = (id: string) => {
     setRequestToDelete(id);
     setDeleteModalOpen(true);

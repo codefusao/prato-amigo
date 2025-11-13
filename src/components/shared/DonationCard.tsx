@@ -1,6 +1,7 @@
 import { Calendar, MapPin, Package, Heart } from "lucide-react";
 import type { ReactNode } from "react";
 import { formatDate } from "../../lib/dateUtils";
+import { categories } from "../modals/DonationModal";
 
 interface DateInfo {
   label: string;
@@ -78,7 +79,7 @@ export function DonationCard({
             {gridCols === 4 && (
               <div className="flex items-center gap-2 text-gray-600">
                 {showCategoryIcon && <Heart className="w-4 h-4" />}
-                <span className={showCategoryIcon ? "capitalize" : ""}>{category}</span>
+                <span className={showCategoryIcon ? "capitalize" : ""}>{categories.find((categoryItem) => categoryItem.value === category)?.label}</span>
               </div>
             )}
           </div>

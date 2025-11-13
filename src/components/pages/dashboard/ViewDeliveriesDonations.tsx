@@ -20,6 +20,8 @@ export function ViewDeliveriesDonations() {
     (r) => r.status === "aprovado" || r.status === "entregue"
   );
 
+  
+
   if (userRequests.length === 0) {
     return (
       <EmptyState

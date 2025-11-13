@@ -27,6 +27,9 @@ export function AvailableDonations() {
     (donation) => donation.status === "disponivel"
   );
 
+  
+
+
   const hasUserRequestedDonation = (donationId: string) => {
     if (!user) return false;
     return requests.some(

@@ -14,6 +14,8 @@ export function ReceivedDonationsHistory() {
     (request) => request.status === "entregue"
   );
 
+  
+
   if (receivedDonations.length === 0) {
     return (
       <EmptyState

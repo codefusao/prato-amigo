@@ -23,7 +23,6 @@ export function ViewDeliveries() {
 
   const approvedRequests = getApprovedRequests().filter((r) => !r.voluntaryId);
 
-  console.log(approvedRequests)
 
   const hasVolunteerAcceptedDonation = (donationId: string) => {
     if (!user) return false;

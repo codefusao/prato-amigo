@@ -27,7 +27,7 @@ export function VolunteerDeliveries() {
   const assignedDeliveries = getApprovedRequests().filter(
     (r) => r.voluntaryId === user?.id
   );
-
+  
   const handleOpenModal = (id: string) => {
     setDelivery(id);
     setConfirmModalOpen(true);

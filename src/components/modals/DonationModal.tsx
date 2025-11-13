@@ -31,7 +31,7 @@ interface DonationModalProps {
   mode?: "create" | "edit";
 }
 
-const categories = [
+export const categories = [
   { value: "frutas-verduras", label: "Frutas e Verduras" },
   { value: "graos-cereais", label: "Grãos e Cereais" },
   { value: "laticinios", label: "Laticínios" },
