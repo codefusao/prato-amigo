@@ -51,7 +51,7 @@ export function Home() {
     <>
       <VideoBanner
         title="Conheça nosso projeto em vídeo: Veja como o Prato Amigo está transformando vidas!"
-        videoUrl="https://youtu.be/U-CZpQUshWQ"
+        videoUrl="https://youtu.be/uIvW2L5NM_U"
       />
 
       <Hero />
